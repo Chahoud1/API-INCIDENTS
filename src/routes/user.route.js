@@ -3,7 +3,7 @@
 const route = require('express').Router();
 const userController = require('../controllers/user.controller');
 
-route.get("/user", userController.soma);
+route.post("/create", userController.create);
 
 
 module.exports = route;

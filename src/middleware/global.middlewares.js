@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import userService from "../services/user.service.js";
+import userService from "../service/user.service.js";
 
 export const validId = (req, res, next) => {
     try {

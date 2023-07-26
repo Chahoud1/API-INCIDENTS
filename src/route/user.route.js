@@ -1,8 +1,8 @@
 // aqui ficam somente as rotas
 
 import express from 'express';
-import userController from '../controllers/user.controller.js';
-import {validId, validUser} from '../middlewares/global.middlewares.js'
+import userController from '../controller/user.controller.js';
+import {validId, validUser} from '../middleware/global.middlewares.js'
 
 const route = express.Router();
 

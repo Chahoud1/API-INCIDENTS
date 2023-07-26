@@ -1,17 +1,23 @@
 // aqui fica a função de callback
 import mongoose from 'mongoose';
-import userService from '../services/user.service.js';
+import userService from '../service/user.service.js';
 
 const create = async (req, res) => {
+   
     try {
-        const { name, email } = req.body;
-        if (!name || !email) {
-            res.status(400).send({ message: "erro" });
+        console.log('ok1')
+        const { name, email, password } = req.body;
+        if (!name || !email || !password) {
+            return res.status(400).send({ message: "Submit all fields!" });
         };
+        
+        console.log('ok2')
         const user = await userService.createService(req.body);
+        console.log("ok3");
         if (!user) {
             return res.status(400).send({ message: "Error creating User" });
         };
+
         res.status(201).send({
             menssage: "user created successfully",
             user: {
@@ -20,8 +26,9 @@ const create = async (req, res) => {
                 email
             }
         });
+
     } catch (err) {
-        return res.status(500).send({ message: "Server error" });
+        return res.status(500).send(console.error(err));
     }
 };
 

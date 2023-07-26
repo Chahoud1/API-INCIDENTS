@@ -1,17 +1,17 @@
 import express from 'express';
-import connectDatabase from './src/database/db.js';
-import userRoute from './src/routes/user.route.js';
 import dotenv from 'dotenv';
+import connectDatabase from './src/database/db.js';
+import userRoute from './src/route/user.route.js';
+import authRoute from './src/route/auth.route.js';
 
-dotenv.config()
 
+dotenv.config();
 const app = express();
 app.use(express.json());
 
-
-app.use("/user", userRoute);
-
 const port = process.env.PORT || 3000;
 connectDatabase();
-
 app.listen(port, () => console.log(`Example app listening on port ${port}`));
+
+app.use('/user', userRoute);
+app.use('/auth', authRoute);

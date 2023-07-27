@@ -21,6 +21,15 @@ const IncidentSchema = new mongoose.Schema({
   status: {
     type: String,
     default: "inProgress"
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Incident",
+    require: true
+  },
+  comments: {
+    type: Array,
+    require: true
   }
 });
 

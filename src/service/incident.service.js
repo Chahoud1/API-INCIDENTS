@@ -1,6 +1,6 @@
 import Incident from '../model/Incident.js';
 
-const createService = (body) => Incident.create(body)
+const createService = (body) => Incident.create(body);
 
 const findAllService = () => Incident.find();
 

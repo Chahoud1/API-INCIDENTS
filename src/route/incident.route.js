@@ -1,5 +1,5 @@
 import incidentController from "../controller/incident.controller.js";
-import {Router} from 'express';
+import { Router } from 'express';
 
 const router = Router();
 
@@ -9,3 +9,4 @@ router.get('/:id', incidentController.findById);
 router.patch('/:id', incidentController.update);
 
 export default router;
+

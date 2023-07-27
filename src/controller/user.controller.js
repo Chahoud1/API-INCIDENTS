@@ -31,7 +31,7 @@ const create = async (req, res) => {
 
 const findAll = async (req, res) => {
 	try {
-		const users = await userService.findAllService();
+		const users = await userService.findAllService().select({password: true, name: true});
 		if (users.length === 0) {
 			return res.status(400).send({ message: "There are no registered users!" })
 		};

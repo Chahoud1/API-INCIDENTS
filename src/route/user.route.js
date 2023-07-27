@@ -2,7 +2,7 @@
 
 import express from 'express';
 import userController from '../controller/user.controller.js';
-import {validId, validUser} from '../middleware/global.middlewares.js'
+import { validId, validUser } from '../middleware/global.middlewares.js'
 
 const route = express.Router();
 

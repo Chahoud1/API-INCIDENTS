@@ -10,6 +10,8 @@ const updateService = (id, body) => Incident.findOneAndUpdate({ _id: id }, body)
 
 const countService = () => Incident.countDocuments();
 
-const lastService = () => Incident.findOne().sort({_id: 1, status: !"InProgress"}).populate('user');
+const lastService = () => Incident.findOne().sort({ _id: 1, status: !"InProgress" }).populate('user');
 
-export default { createService, findAllService, findByIdService, updateService, countService, lastService };
+const searchByTitle = (title) => Incident.find({ title: { $regex: `${title || ""}`, $options: 'i' }, }).populate('user').sort({_id: -1});
+
+export default { createService, findAllService, findByIdService, updateService, countService, lastService, searchByTitle };

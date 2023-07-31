@@ -84,11 +84,26 @@ const last = async (req, res) => {
 	try {
 		const lastIncident = await incidentService.lastService();
 		if (!lastIncident) return res.status(400).send({ message: "There is no registered incidents" });
-		
+
 		res.json(lastIncident);
 	} catch (err) {
-		return res.status(500).send(console.error(err)); 
+		return res.status(500).send(console.error(err));
 	};
 };
 
-export default { create, findAll, findById, update, last };
+const searchByTitle = async (req, res) => {
+	try {
+		const title = req.query.title;
+		if (!title) return res.status(400).send({ message: "You need to enter some title" });
+
+		const incidents = await incidentService.searchByTitle(title);
+		if (incidents.length === 0) return res.status(400).send({ message: "There are no incidents with this title" });
+
+		res.status(200).send(incidents);
+
+	} catch (err) {
+		return res.status(500).send({ message: err.message });
+	};
+};
+
+export default { create, findAll, findById, update, last, searchByTitle };

@@ -18,12 +18,27 @@ const create = async (req, res) => {
 
 const findAll = async (req, res) => {
 	try {
-		const incidents = await incidentService.findAllService();
-		if (incidents.length === 0) {
-			res.status(400).send({ message: "Server error" });
-		}
+		let { limit, offset } = req.query;
+		!limit ? limit = 5 : Number(limit);
+		!offset ? offset = 0 : Number(offset);
 
-		res.status(200).send(incidents);
+		const incidents = await incidentService.findAllService(limit, offset);
+		const countIncidents = await incidentService.countService();
+
+		const nextOffset = offset + limit;
+		const nextUrl = nextOffset < countIncidents ? `${req.baseUrl}/limit=${limit}&offset=${nextOffset}` : null;
+
+		const previousOffset = offset - limit;
+		const previousUrl = previousOffset > 0 ? `${req.baseUrl}/limit${limit}&offset=${previousOffset}` : null;
+
+		if (incidents.length === 0) {
+			res.status(400).send({ message: "There is no registered incidents" });
+		};
+
+		res.status(200).send({
+			limit, offset, nextUrl, previousUrl, countIncidents, incidents
+/* 			incidents: incidents.map(item => ({number: item.number, title: item.title, description: item.description, createdAt: item.createdAt, status: item.status, user: item.user, comments: item.comments}))
+ */		});
 
 	} catch (err) {
 		return res.status(500).send(console.error(err));
@@ -65,4 +80,15 @@ const update = async (req, res) => {
 	};
 };
 
-export default { create, findAll, findById, update };
+const last = async (req, res) => {
+	try {
+		const lastIncident = await incidentService.lastService();
+		if (!lastIncident) return res.status(400).send({ message: "There is no registered incidents" });
+		
+		res.json(lastIncident);
+	} catch (err) {
+		return res.status(500).send(console.error(err)); 
+	};
+};
+
+export default { create, findAll, findById, update, last };

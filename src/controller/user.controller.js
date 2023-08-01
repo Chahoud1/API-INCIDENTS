@@ -1,16 +1,15 @@
 // aqui fica a função de callback
 import mongoose from 'mongoose';
-import userService from '../service/user.service.js';
+import service from '../service/user.service.js';
 
 const create = async (req, res) => {
-
 	try {
 		const { name, email, password } = req.body;
 		if (!name || !email || !password) {
 			return res.status(400).send({ message: "Submit all fields!" });
 		};
 
-		const user = await userService.createService(req.body);
+		const user = await service.create(req.body);
 		if (!user) {
 			return res.status(400).send({ message: "Error creating User" });
 		};
@@ -31,7 +30,7 @@ const create = async (req, res) => {
 
 const findAll = async (req, res) => {
 	try {
-		const users = await userService.findAllService().select({password: true, name: true});
+		const users = await service.findAll().select({ password: true, name: true });
 		if (users.length === 0) {
 			return res.status(400).send({ message: "There are no registered users!" })
 		};
@@ -54,7 +53,7 @@ const update = async (req, res) => {
 			return res.status(400).send({ message: "Submit at least one field!" });
 		};
 		const { id, user } = req;
-		await userService.updateService(id, name, email);
+		await service.update(id, name, email);
 		res.status(200).send({ message: "User sucessfully updated" });
 	} catch (err) {
 		return res.status(500).send({ message: "Server error" });

@@ -1,11 +1,11 @@
 import User from '../model/User.js';
 
-const createService = (body) => User.create(body);
+const create = (body) => User.create(body);
 
-const findAllService = () => User.find();
+const findAll = () => User.find();
 
-const findByIdService = (id) => User.findById(id);
+const findById = (id) => User.findById(id);
 
-const updateService = (id, name, body) => User.findOneAndUpdate({ _id: id }, { name, body });
+const update = (id, name, body) => User.findOneAndUpdate({ _id: id }, { name, body });
 
-export default { createService, findAllService, findByIdService, updateService };
+export default { create, findAll, findById, update };

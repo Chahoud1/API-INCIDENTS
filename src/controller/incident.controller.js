@@ -1,3 +1,4 @@
+import Incident from "../model/Incident.js";
 import incidentService from "../service/incident.service.js";
 
 const create = async (req, res) => {
@@ -36,9 +37,9 @@ const findAll = async (req, res) => {
 		};
 
 		res.status(200).send({
-			limit, offset, nextUrl, previousUrl, countIncidents, incidents
-/* 			incidents: incidents.map(item => ({number: item.number, title: item.title, description: item.description, createdAt: item.createdAt, status: item.status, user: item.user, comments: item.comments}))
- */		});
+			/* limit, offset, nextUrl, previousUrl, countIncidents, incidents */
+			incidents: incidents.map(item => ({ number: item.number, title: item.title, description: item.description, createdAt: item.createdAt, status: item.status, user: item.user, comments: item.comments }))
+		});
 
 	} catch (err) {
 		return res.status(500).send(console.error(err));
@@ -106,4 +107,16 @@ const searchByTitle = async (req, res) => {
 	};
 };
 
-export default { create, findAll, findById, update, last, searchByTitle };
+const byUser = async (req, res) => {
+	try {
+		const userIncidents = await incidentService.byUser(req.userId);
+		if (userIncidents.length === 0) return res.status(400).send({ message: "No incidents found" });
+
+		return res.status(500).send(userIncidents);
+
+	} catch (err) {
+		return res.status(500).send({ message: err.message });
+	};
+};
+
+export default { create, findAll, findById, update, last, searchByTitle, byUser };

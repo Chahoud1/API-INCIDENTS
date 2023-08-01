@@ -24,7 +24,7 @@ const IncidentSchema = new mongoose.Schema({
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Incident",
+    ref: "User",
     require: true
   },
   comments: {

@@ -14,4 +14,6 @@ const lastService = () => Incident.findOne().sort({ _id: 1, status: !"InProgress
 
 const searchByTitle = (title) => Incident.find({ title: { $regex: `${title || ""}`, $options: 'i' }, }).populate('user').sort({_id: -1});
 
-export default { createService, findAllService, findByIdService, updateService, countService, lastService, searchByTitle };
+const byUser = (userId) => Incident.find({user: userId}).populate('user');
+
+export default { createService, findAllService, findByIdService, updateService, countService, lastService, searchByTitle, byUser };

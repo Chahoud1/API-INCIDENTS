@@ -7,8 +7,9 @@ const router = Router();
 router.post('/', authMiddleware, incidentController.create);
 router.get('/last', incidentController.last);
 router.get('/search', incidentController.searchByTitle);
-router.get('/', incidentController.findAll);
+router.get('/byUser', authMiddleware, incidentController.byUser);
 
+router.get('/', incidentController.findAll);
 router.get('/:id', authMiddleware, incidentController.findById);
 router.patch('/:id', authMiddleware, incidentController.update);
 

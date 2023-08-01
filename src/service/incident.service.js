@@ -6,7 +6,7 @@ const findAll = (limit, offset) => Incident.find().sort({ _id: -1 }).limit(limit
 
 const findById = (id) => Incident.findById(id);
 
-const update = (id, body) => Incident.findOneAndUpdate({ _id: id }, body);
+const update = (id, body) => Incident.findOneAndUpdate({ _id: id }, body, {rawResult: true});
 
 const count = () => Incident.countDocuments();
 

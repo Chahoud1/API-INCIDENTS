@@ -38,7 +38,7 @@ const findAll = async (req, res) => {
 
 		res.status(200).send({
 			/* limit, offset, nextUrl, previousUrl, countIncidents, incidents */
-			incidents: incidents.map(item => ({ number: item.number, title: item.title, description: item.description, createdAt: item.createdAt, status: item.status, user: item.user, comments: item.comments }))
+			incidents: incidents.map(item => ({ id: item._id, number: item.number, title: item.title, description: item.description, createdAt: item.createdAt, status: item.status, user: item.user, comments: item.comments }))
 		});
 
 	} catch (err) {
@@ -71,10 +71,18 @@ const update = async (req, res) => {
 		if (!req.body.number && !req.body.title && !req.body.description && !req.body.createdAt && !req.body.status)
 			return res.status(400).send({ message: "Submit at least one field" });
 
-		const updatedIncident = await service.update(req.params.id, req.body);
-		if (!updatedIncident) return res.status(400).send({ message: "Error in update the incident" });
+		const incident = await service.findById(req.params.id);
+		if (!incident)
+			return res.status(400).send({ message: "Incident not found" });
 
-		return res.status(200).send({ message: "Incident updated successfully" });
+		if (incident.user._id !== req.userId)
+			return res.status(400).send({ message: "You did not created this incident" });
+
+		const updatedIncident = await service.update(req.params.id, req.body);
+		if (!updatedIncident)
+			return res.status(400).send({ message: "Error in update the incident" });
+
+		return res.status(200).send({ message: "Incident successfully updated!" });
 
 	} catch (err) {
 		return res.status(500).send(console.error(err));

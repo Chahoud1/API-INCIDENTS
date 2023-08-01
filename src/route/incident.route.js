@@ -1,18 +1,19 @@
-import incidentController from "../controller/incident.controller.js";
+import controller from "../controller/incident.controller.js";
 import { Router } from 'express';
 import { authMiddleware } from '../middleware/auth.middleware.js';
 
 const router = Router();
 
-router.post('/', authMiddleware, incidentController.create);
-router.get('/last', incidentController.last);
-router.get('/search', incidentController.searchByTitle);
-router.get('/byUser', authMiddleware, incidentController.byUser);
+router.get('/last', controller.last);
+router.get('/search', controller.searchByTitle);
+router.get('/byUser', authMiddleware, controller.byUser);
 
-router.get('/', incidentController.findAll);
-router.get('/:id', authMiddleware, incidentController.findById);
-router.patch('/:id', authMiddleware, incidentController.update);
+router.get('/', controller.findAll);
+router.get('/:id', authMiddleware, controller.findById);
 
+router.post('/', authMiddleware, controller.create);
+
+router.patch('/:id', authMiddleware, controller.update);
 
 export default router;
 

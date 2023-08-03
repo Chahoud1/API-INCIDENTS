@@ -1,5 +1,6 @@
 import Incident from "../model/Incident.js";
 import service from "../service/incident.service.js";
+import mongoose from "mongoose";
 
 const create = async (req, res) => {
 	try {
@@ -13,7 +14,7 @@ const create = async (req, res) => {
 		return res.status(201).send({ message: "Incident has been created successfully" });
 
 	} catch (err) {
-		return res.status(500).send(console.error(err));
+		return res.status(500).send({ message: err.message });
 	};
 };
 
@@ -42,7 +43,7 @@ const findAll = async (req, res) => {
 		});
 
 	} catch (err) {
-		return res.status(500).send(console.error(err));
+		return res.status(500).send({ message: err.message });
 	};
 };
 
@@ -62,7 +63,7 @@ const findById = async (req, res) => {
 		res.status(200).send(incident);
 
 	} catch (err) {
-		return res.status(500).send({ message: "Server error" });
+		return res.status(500).send({ message: err.message });
 	};
 };
 
@@ -75,8 +76,8 @@ const update = async (req, res) => {
 		if (!incident)
 			return res.status(400).send({ message: "Incident not found" });
 
-		if (incident.user._id !== req.userId)
-			return res.status(400).send({ message: "You did not created this incident" });
+		if (String(incident.user._id) !== req.userId)
+			return res.status(400).send({ message: "You cannot update this incident" });
 
 		const updatedIncident = await service.update(req.params.id, req.body);
 		if (!updatedIncident)
@@ -85,7 +86,7 @@ const update = async (req, res) => {
 		return res.status(200).send({ message: "Incident successfully updated!" });
 
 	} catch (err) {
-		return res.status(500).send(console.error(err));
+		return res.status(500).send({ message: err.message });
 	};
 };
 
@@ -97,7 +98,7 @@ const last = async (req, res) => {
 		res.json(lastIncident);
 
 	} catch (err) {
-		return res.status(500).send(console.error(err));
+		return res.status(500).send({ message: err.message });
 	};
 };
 
@@ -128,4 +129,44 @@ const byUser = async (req, res) => {
 	};
 };
 
-export default { create, findAll, findById, update, last, searchByTitle, byUser };
+const addComment = async (req, res) => {
+
+	const id = req.params.id;
+	const { comment } = req.body;
+	const userId = req.userId
+
+	try {
+
+		if (!comment)
+			return res.status(400).send({ message: "You need to send the comment" });
+
+		if (!mongoose.isValidObjectId(id))
+			return res.status(400).send({ message: "Invalid ID" });
+
+		await service.addComment(id, comment, userId);
+
+		res.status(200).send({ message: "Comment has been successfully added" });
+
+	} catch (err) {
+		return res.status(500).send({ message: err.message });
+	};
+};
+
+const deleteComment = async (req, res) => {
+
+	const { incidentId, commentId } = req.params;
+	const userId = req.userId
+
+	try {
+
+		const deletedComment = await service.deleteComment(incidentId, commentId, userId);
+		console.log(deletedComment)
+
+		res.status(200).send({ message: "Incident has been successfully deleted" });
+
+	} catch (err) {
+		return res.status(500).send({ message: err.message });
+	};
+};
+
+export default { create, findAll, findById, update, last, searchByTitle, byUser, addComment, deleteComment };

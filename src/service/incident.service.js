@@ -6,7 +6,7 @@ const findAll = (limit, offset) => Incident.find().sort({ _id: -1 }).limit(limit
 
 const findById = (id) => Incident.findById(id);
 
-const update = (id, body) => Incident.findOneAndUpdate({ _id: id }, body, {rawResult: true});
+const update = (id, body) => Incident.findOneAndUpdate({ _id: id }, body, { rawResult: true });
 
 const count = () => Incident.countDocuments();
 
@@ -16,4 +16,13 @@ const searchByTitle = (title) => Incident.find({ title: { $regex: `${title || ""
 
 const byUser = (userId) => Incident.find({ user: userId }).populate('user');
 
-export default { create, findAll, findById, update, count, last, searchByTitle, byUser };
+const addComment = (incidentId, comment, userId) => {
+  let commentId = Math.floor(Date.now() * Math.random()).toString();
+  return Incident.findOneAndUpdate
+    ({ _id: incidentId }, { $push: { comments: { commentId, message: comment, userId, createAt: new Date() } } }, { rawResult: true });
+};
+
+const deleteComment = (incidentId, commentId, userId) => Incident.findOneAndUpdate({ _id: incidentId }, { $pull: { comments: { commentId, userId } } }); //, { rawResult: true }
+
+
+export default { create, findAll, findById, update, count, last, searchByTitle, byUser, addComment, deleteComment };

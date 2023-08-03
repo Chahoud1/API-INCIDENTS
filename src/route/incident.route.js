@@ -13,7 +13,8 @@ router.get('/:id', authMiddleware, controller.findById);
 
 router.post('/', authMiddleware, controller.create);
 
+router.patch('/comment/:id', authMiddleware, controller.addComment);
+router.patch('/comment/:incidentId/:commentId', authMiddleware, controller.deleteComment);
 router.patch('/:id', authMiddleware, controller.update);
 
 export default router;
-

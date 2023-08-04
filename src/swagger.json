@@ -1,0 +1,633 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Incidents API Documentation",
+    "description": "In this documentation you will be able to consult the API end-points and also test all availble routes. Do not forget to register and carry out the authorization.",
+    "contact": {
+      "email": "roger_chahoud@outlook.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local Server"
+    }
+  ],
+  "paths": {
+    "/user": {
+      "post": {
+        "summary": "Create a new user",
+        "description": "Route responsible for creating a new user",
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "example": {
+                  "name": "Roger Chahoud",
+                  "email": "rchahoud@gmail.com",
+                  "password": "12345"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Not Found"
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schemma": {
+                  "type": "object",
+                  "properties": {
+                    "$ref": "#/components/schemas/User"
+                  },
+                  "example": [
+                    {
+                      "name": "Roger Chahoud",
+                      "email": "rchahoud@gmail.com"
+                    },
+                    {
+                      "name": "Jose Ricardo",
+                      "email": "rbarreto@gmail.com"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Search all users",
+        "description": "Route responsible for fetching all users",
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Not Found"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schemma": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "patch": {
+        "summary": "Update user by id",
+        "description": "Route responsible for editing the user by id",
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "description": "User ID",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "Users": {
+                  "value": {
+                    "name": "Roger Chahoud"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Not Found"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Search user by id",
+        "description": "Route responsible for searching for user by id",
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "description": "User ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Not Found"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schemma": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/User"
+                }  
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth": {
+      "post": {
+        "summary": "Login to incidents site",
+        "description": "Route responsible for logging in a registered user",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "example": {
+                  "email": "rchahoud@gmail.com",
+                  "password": "12345"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Not Found"
+          },
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/incident/last": {
+      "get": {
+        "summary": "Search the last incident created",
+        "description": "Route responsible for fetching the last incident created",
+        "tags": [
+          "Incident"
+        ],
+        "responses": {
+          "400": {
+            "description": "Not Found"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schemma": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Incident"
+                },
+                "example": {
+                  "number": "14",
+                  "title": "The 14th incident created"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/incident/search": {
+      "get": {
+        "summary": "Search incidents by title",
+        "description": "Route responsible for fetching the posts that match the title sent via query params",
+        "tags": [
+          "Incident"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "title",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Not Found"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schemma": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Incident"
+                },
+                "example": {
+                  "number": "1",
+                  "title": "The first incident created"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/incident/byUser": {
+      "get": {
+        "summary": "Search incidents by user id",
+        "description": "Route responsible for fetching incidents by user id",
+        "tags": [
+          "Incident"
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Not Found"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schemma": {
+                  "type": "array",
+                  "$ref": "#/components/schemas/Incident"
+                },
+                "example": [{
+                  "number": "1",
+                  "title": "The first incident created"
+                }, 
+                {
+                  "number": "2",
+                  "title": "The second incident created"
+                }]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/incident/": {
+      "get": {
+        "summary": "Search all incidents",
+        "description": "Route responsible for fetching all incidents",
+        "tags": [
+          "Incident"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Not Found"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schemma": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Incident"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create an incident",
+        "description": "Create an incident",
+        "tags": [
+          "Incident"
+        ],
+        "responses": {
+          "400": {
+            "description": "Not Found"
+          },
+          "200": {
+            "description": "Incident created",
+            "content": {
+              "application/json": {
+                "schemma": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Incident"
+                },
+                "example": {
+                  "number": "1",
+                  "title": "The first incident created"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/incident/{id}": {
+      "get": {
+        "summary": "Search incident by id",
+        "description": "Route responsible for fetching incident by id",
+        "tags": [
+          "Incident"
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "description": "Post ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Not Found"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schemma": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Incident"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update an incident",
+        "description": "Route responsible for updating an incident",
+        "tags": [
+          "Incident"
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "description": "Post ID",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Post"
+              },
+              "examples": {
+                "Incident": {
+                  "value": {
+                    "number": "",
+                    "title": "",
+                    "description": ""
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Not Found"
+          },
+          "200": {
+            "description": "Incident updated",
+            "content": {
+              "application/json": {
+                "schemma": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Incident"
+                },
+                "example": {
+                  "number": "1",
+                  "title": "The first incident created"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/incident/comment/{id}": {
+      "get": {
+        "summary": "Create a comment on an incident",
+        "description": "Route responsible for commenting on an incident",
+        "tags": [
+          "Incident"
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "description": "User ID",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Comment"
+              },
+              "examples": {
+                "Comment": {
+                  "value": {
+                    "message": "Comentário legal"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Not Found"
+          },
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/incident/comment/{incidentId}/{commentId}": {
+      "get": {
+        "summary": "Delete one comment",
+        "description": "Delete one comment in one incident",
+        "tags": [
+          "Incident"
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "incidentId",
+            "type": "string",
+            "description": "Incident ID",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "CommentId",
+            "type": "string",
+            "description": "Comment ID",
+            "required": true
+          }
+        ],
+        "responses":{
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Not Found"
+          },
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Incident": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "date"
+          },
+          "status": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "comments": {
+            "type": "array"
+          }
+        }
+      },
+      "Comment": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

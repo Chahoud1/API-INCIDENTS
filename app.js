@@ -4,6 +4,7 @@ import connectDatabase from './src/database/db.js';
 import userRoute from './src/route/user.route.js';
 import authRoute from './src/route/auth.route.js';
 import incidentRoute from './src/route/incident.route.js';
+import swaggerRoute from './src/route/swagger.route.js';
 
 dotenv.config();
 const app = express();
@@ -15,3 +16,4 @@ app.use(express.json());
 app.use('/user', userRoute);
 app.use('/auth', authRoute);
 app.use('/incident', incidentRoute);
+app.use('/doc', swaggerRoute);

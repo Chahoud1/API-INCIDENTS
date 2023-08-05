@@ -12,6 +12,10 @@
     {
       "url": "http://localhost:3000",
       "description": "Local Server"
+    },
+    {
+      "url": "https://api-incidents.onrender.com",
+      "description": "Render cloud server"
     }
   ],
   "paths": {
